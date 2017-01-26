@@ -1,0 +1,14 @@
+<div class="dropdown">
+	<buttom class="btn btn-primary dropdown-toggle " type="button" 
+	id="botoncito" data-toggle="dropdown" aria-extended="true">
+		GestionaRutas <span class="caret"></span>
+	</buttom>
+	<ul class="dropdown-menu" role="menu" aria-labelledby="botoncito">
+		<li role="presentation" class="dropdown-header">Agregar Rutas</li>
+		<li role="presentation"><a role="item" href="#agregarRuta">agregarRuta</a></li>		
+		<li class="divider"></li>
+		<div class="" ng-repeat="ruta in $ctrl.rutas">
+			<li role="presentation"><a role="item" href="#{{ruta.ruta}}">{{ruta.nombre}}</a></li>
+		</div>
+	</ul>
+</div>

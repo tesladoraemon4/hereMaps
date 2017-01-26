@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html ng-app="pagina">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1.0, width=device-width"/>
+
+     <link rel="stylesheet" type="text/css" href="bower_components/bootstrap/dist/css/bootstrap.css">
+
+     <link rel="stylesheet" type="text/css" href="css/style.css">
+
+     <link rel="stylesheet" type="text/css" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+
+
+
+
+
+     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.js"></script>
+
+
+    <!--Cargamos here-->
+    <script src="http://js.api.here.com/v3/3.0/mapsjs-core.js"
+      type="text/javascript" charset="utf-8"></script>
+    <script src="http://js.api.here.com/v3/3.0/mapsjs-service.js"
+      type="text/javascript" charset="utf-8"></script>
+      <script src="http://js.api.here.com/v3/3.0/mapsjs-mapevents.js" 
+         type="text/javascript" charset="utf-8"></script>
+
+     <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+
+     <script src="app-dependences.js"></script>
+
+
+     <script src="app-controllers.js"></script>
+
+    <script src="agregar-boton/agregar-boton.js"></script>
+
+
+
+
+
+     <link rel="stylesheet" type="text/css" href="css/style.css">
+
+</head>
+<body >
+
+
+
+
+
+
+
+    <header>
+        <div class="container">
+
+            
+
+            <h1>Titulo pagina</h1>
+            <a class="btn btn-info" href="#/">index</a>
+            <a class="btn btn-info" href="#quienesSomos">quienes somos</a>
+            <a class="btn btn-info" href="#aprendiendoBoot">aprendiendoBoot</a>
+            <a class="btn btn-info" href="#aprendiendoAngular">Angular Aprendiendo</a>
+            <boton-agregar></boton-agregar>
+            
+        </div>  
+    </header>
+
+
+    <div ui-view></div>
+
+
+
+
+
+
+    <div class="clearfix visible-sm-block"></div>
+
+
+    <footer>
+        <div class="container">
+            <div class="row">
+
+                <div class="col-lg-3  col-md-3 col-sm-3 col-xs-2 col-sm-offset-1 col-xs-offset-2">
+                    <img src="templates/images/git.png" class="img-responsive">
+                </div>
+                <div class="col-lg-3  col-md-3 col-sm-3 col-xs-2 col-sm-offset-1 col-xs-offset-2">
+                    <img src="templates/images/facebook.png" alt="" class="img-responsive">
+                </div>
+                <div class="col-lg-3  col-md-3 col-sm-3 col-xs-2 col-sm-offset-1 col-xs-offset-2">
+                    <img src="templates/images/facebook.png" alt="" class="img-responsive">
+                </div>
+
+
+
+            </div>
+
+            <div class="row">
+                
+                <div class="col-lg-3 col-lg-offset-5 col-md-3 col-md-offset-5 
+                            col-sm-3 col-sm-offset-5 col-xs-3 col-xs-offset-5">
+                    <a href="#" class="tipografia">Contacto</a><br>
+                    <a href="#" class="tipografia">Terminos y condiciones</a><br>
+                    <a href="#" class="tipografia">Telefono</a><br>
+                    
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+
+    
+</body>
+</html>
