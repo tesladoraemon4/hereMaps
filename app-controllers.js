@@ -5,7 +5,10 @@ angular.module('pagina')
 .controller('homeController', function($scope){
 	$scope.hola="jsdlhfgsjd";
 })
-.controller('ControlX',function ($log) {
+.controller('ControlX', function () {
+	
+})
+.controller('mapita',function ($log) {
 
 
 	

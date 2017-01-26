@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('pagina',['ui.router'])
+angular.module('pagina',['ui.router','hereMapa'])
 .config(function($urlRouterProvider, $stateProvider) {
 
 
