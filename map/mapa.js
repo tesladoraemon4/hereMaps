@@ -4,9 +4,13 @@
 * Description
 */
 angular.module('hereMapa', [])
-.service('mapaProvider',function () {
+.factory('mapaProvider',function () {
 
-	this.instanciarMapa = function (idElement,JSONFeatures,platform) {
+
+
+	var mapaProvider={};
+
+	mapaProvider.instanciarMapa = function (idElement,JSONFeatures,platform) {
 		var defaultLayers = platform.createDefaultLayers();
 		return new H.Map(//retornamos el mapa
 		  document.getElementById(idElement),
@@ -16,77 +20,115 @@ angular.module('hereMapa', [])
 
 
 
-	this.addEventsMap = function (map,event,eventFunction) {
+	mapaProvider.addEventsMap = function (map,event,eventFunction) {
 		var mapEvents = new H.mapevents.MapEvents(map);
 
 		map.addEventListener(event,eventFunction);
 
 		var behavior = new H.mapevents.Behavior(mapEvents);
 	}
-
-
-
-
-
-
-
-//no sirve
-	this.addRoute = function (platform) {
+	mapaProvider.addRoute = function (platform,routeRequestParams,succes,error) {
 		var router = platform.getRoutingService(),
-		  routeRequestParams = {
-		    mode: 'fastest;car',
-		    representation: 'display',
-		    routeattributes: 'waypoints,summary,shape,legs',
-		    maneuverattributes: 'direction,action',
-		    waypoint0: '19.3257086,-99.07784379999998', // Brandenburg Gate
-		    waypoint1: '19.3599369,-98.97373779999998'  // Friedrichstraße Railway Station
-		  };
+		  routeRequestParams;
 
 
 		router.calculateRoute(
 		  routeRequestParams,
-		  function (succes) {
-		  	$log.log(succes.response.route[0]);
-		  },
-		 	function (error) {
-		 		$log.log(error);
-		 	}
+		  succes,error
 		);
 	}
 
+
+
+
+
 	return mapaProvider;
 
+}
+.factory('consultasHttp',function ($http,$q) {
+	return {
+		getAll:function (searchstexts) {
+			var defered = $q.defer();
+			dir="https://geocoder.cit.api.here.com/6.2/geocode.xml?"+
+			"app_id=EJiiwcESc8a3fX3YDAhK&app_code=lbdJ16arthEPwrA7nhmluA&searchtext='"
+			+searchstexts+"'";
+			peticiones.push($http({
+			  method: 'GET',
+			  url: dir,
+			  responseType:'text/plain'
+			}).then(
+				function successCallback(response) {
+				console.log(response.status);
+				defered.resolve(response);
+			}, function errorCallback(response) {
+				console.log(response.status);
+				defered.reject(response);
+			}));
+
+
+			return defered.promise;
+		}
+	}
+	
 })
 //servicio para consultar las coordenadas del itinerario echo anterior mente
-.service('queryCoordinates',function ($http) {
+.factory('queryCoordinates',function ($http,mapaProvider,$log,xmlManager) {
+	var queryCoordinates={};
+	queryCoordinates.platform = new H.service.Platform({
+	  'app_id': 'EJiiwcESc8a3fX3YDAhK',
+	  'app_code': 'lbdJ16arthEPwrA7nhmluA'
+	});
+
+	var options = {
+	  enableHighAccuracy: true,
+	  timeout: 5000,
+	  maximumAge: 0
+	};
+
+	function error(err) {
+	  console.warn('ERROR(' + err.code + '): ' + err.message);
+	};
 
 
-	//genera el itinerario y consulta los lugares guardados en el mismo
-	this.getRoutesGood = function () {
-		//hacer consulta y regresar array de strings del server
-		var searchstexts = ['Mexico DF','ricardo flores magon ','ecatepec'];
-		var dir;
 
+	/*
+	this.geolocalizarY= function () {
 
-		for (var i = searchstexts.length - 1; i >= 0; i--) {
-			dir="https://geocoder.cit.api.here.com/6.2/geocode.xml?"+
-			"app_id=EJiiwcESc8a3fX3YDAhK&app_code=lbdJ16arthEPwrA7nhmluA&searchtext="
-			+searchstexts[i];
-			$http.get(dir)//obtenemos todo del texto de busqueda
-			.success(function (data) {
+		//si sucede vamos a success
+		navigator.geolocation.getCurrentPosition(
+		function (pos) {
+			var crd = pos.coords;
 
-
-			}).error(function (error) {
-				console.log(error);
+			//añadimos la ruta
+			mapaProvider.addRoute(platform,
+			{
+			    mode: 'fastest;car',
+			    representation: 'display',
+			    routeattributes: 'waypoints,summary,shape,legs',
+			    maneuverattributes: 'direction,action',
+			    waypoint0: crd.latitude+","+crd.longitude, // Brandenburg Gate
+			    waypoint1:  // Friedrichstraße Railway Station
 			});
+
+
+			console.log("Se realizo bien la geolocalizacion");
+		}, error, options);
+	}
+	*/
+
+	//contiene las coordenadas de lugares en un arreglo de string
+	queryCoordinates.getCordenadasLugares = function () {
+		//hacer consulta y regresar array de strings del server
+		var searchstexts = ['Mexico DF','ricardo flores magon'];
+		var dir, coordenadas=[], peticiones=[];
+
+		for (var i=0; i<searchstexts.length;i++) {
+
 		}
 
 
 
-
-
-
-		return [{obj}];
+		return peticiones;
 	}
 
 
@@ -101,8 +143,8 @@ angular.module('hereMapa', [])
 })
 .component('mapaHere',{
 	templateUrl:'map/mapa.html',
-	controller:function (mapaProvider) {
-
+	controller:function (mapaProvider,queryCoordinates,$log) {
+		//PREPARAMOS EL MAPA 
 		var platform = new H.service.Platform({
 		  'app_id': 'EJiiwcESc8a3fX3YDAhK',
 		  'app_code': 'lbdJ16arthEPwrA7nhmluA'
@@ -116,6 +158,19 @@ angular.module('hereMapa', [])
 			platform
 			);
 
+
+		//BUSCAMOS LAS CORDENADAS
+
+		var peticiones = queryCoordinates.getCordenadasLugares();
+
+		console.log(peticiones[0].data);
+
+
+
+
+
+
+		//AÑADIMOS EL EVENTO AL MAPA
 		mapaProvider.addEventsMap(mapa,'tap',function (evt) {
 			console.log(evt.type, evt.currentPointer.type); 
 		});
